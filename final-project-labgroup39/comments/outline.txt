@@ -1,0 +1,46 @@
+The Flow of the Game 
+// written by Neil (ssong44)
+
+
+Initial Setup
+- Application starts
+- Register player names and numbers (we will fix player number as 3 though)
+- Initalize each player's score as 0
+- Initialize the round number as 0
+- Decide the order players make their move // this can be the order in which player has registered their names
+// we can maintain next_ to store this order. This will be circular.
+// first_player->next_ = second_player 
+- Initalize the first player as current_player_
+
+// Game starts
+while (!GameEnds) // return true if there is a loser or less than 3 cards are remaining in the deck
+    // Deal the first cards
+    ++round_no_
+    ResetDeck // collect all the cards dealt and shuffle the deck
+    DealFirstCard // Deal() to each player in the designated order
+    If (SameCard) // 2 or more players are dealt the same card 
+        ResetDeck
+        DealFirstCard
+
+    // Each player makes a move until the round ends
+    while (true) 
+        if (DeckIsEmpty) // return true if 0 card remains in the deck
+            // the round is a draw and the scores do not change
+            current_player_ = current_player.next_
+            break
+        // Move(player) : Take in user input from the player: draw or fold
+        if (Move(current_player_) == "draw")
+            Deal(current_player_) // deal a card to the player from the top of the deck. Remove the dealt card from the deck
+            if (HasPair(current_player_))
+                // PairCard(player) : return the value of the pair the player has
+                current_player.score += PairCard(current_player_)
+                current_player_ = current_player.next_
+                break
+        if (Move(current_player_) == "fold")
+            // PairCard(player) : return the value of the lowest number card the player has
+            current_player.score += MinScore(current_player_)
+            current_player_ = current_player.next_
+            break
+
+// if the code reaches here, there is a loser.
+return Loser() // return the player with the highest score
